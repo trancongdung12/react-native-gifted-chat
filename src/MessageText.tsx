@@ -16,7 +16,7 @@ import Communications from 'react-native-communications'
 import { LeftRightStyle, IMessage } from './Models'
 import { StylePropType } from './utils'
 
-const WWW_URL_PATTERN = /^www\./i
+const WWW_URL_PATTERN = /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g
 
 const textStyle = {
   fontSize: 16,
@@ -120,7 +120,7 @@ export default class MessageText<
     // When someone sends a message that includes a website address beginning with "www." (omitting the scheme),
     // react-native-parsed-text recognizes it as a valid url, but Linking fails to open due to the missing scheme.
     if (WWW_URL_PATTERN.test(url)) {
-      this.onUrlPress(`http://${url}`)
+      Linking.openURL(url)
     } else {
       Linking.canOpenURL(url).then(supported => {
         if (!supported) {
